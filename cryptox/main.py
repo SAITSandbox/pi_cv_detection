@@ -18,3 +18,10 @@ def aes256_encrypt(data: str, filename: str):
     file_out = open(filename, "wb")
     [ file_out.write(x) for x in (cipher.nonce, tag, ciphertext) ]
     file_out.close()
+
+
+
+if __name__ == "__main__":
+    dummy_data = "{'test': 'hello world'}"
+    aes256_encrypt(dummy_data, 'test.bin')
+    
