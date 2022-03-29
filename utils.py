@@ -25,34 +25,45 @@ _FONT_SIZE = 1
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 0, 255)  # red
 
+# Function for finding the center of a rectangle
+def find_center(x, y, w, h):
+	x1=int(w/2)
+	y1=int(h/2)
+	cx = x+x1
+	cy=y+y1
+	return cx, cy
 
 def visualize(
-    image: np.ndarray,
-    detections: List[Detection],
+image: np.ndarray,
+detections: List[Detection],
 ) -> np.ndarray:
-  """Draws bounding boxes on the input image and return it.
+	"""Draws bounding boxes on the input image and return it.
 
-  Args:
-    image: The input RGB image.
-    detections: The list of all "Detection" entities to be visualize.
+	Args:
+	image: The input RGB image.
+	detections: The list of all "Detection" entities to be visualize.
 
-  Returns:
-    Image with bounding boxes.
-  """
-  for detection in detections:
-    # Draw bounding_box
-    start_point = detection.bounding_box.left, detection.bounding_box.top
-    end_point = detection.bounding_box.right, detection.bounding_box.bottom
-    cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
+	Returns:
+	Image with bounding boxes.
+	"""
+	for detection in detections:
+		# Draw bounding_box
+		start_point = detection.bounding_box.left, detection.bounding_box.top
+		end_point = detection.bounding_box.right, detection.bounding_box.bottom
+		cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
+		top, left, bottom, right = detection.bounding_box
+		center = find_center(left, top, right, bottom)
+		cv2.circle(image, center, 10, (0, 0, 255), 5) 
 
-    # Draw label and score
-    category = detection.categories[0]
-    class_name = category.label
-    probability = round(category.score, 2)
-    result_text = class_name + ' (' + str(probability) + ')'
-    text_location = (_MARGIN + detection.bounding_box.left,
-                     _MARGIN + _ROW_SIZE + detection.bounding_box.top)
-    cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
 
-  return image
+		# Draw label and score
+		category = detection.categories[0]
+		class_name = category.label
+		probability = round(category.score, 2)
+		result_text = class_name + ' (' + str(probability) + ')'
+		text_location = (_MARGIN + detection.bounding_box.left,
+							_MARGIN + _ROW_SIZE + detection.bounding_box.top)
+		cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+					_FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
+
+	return image
