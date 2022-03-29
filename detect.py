@@ -9,6 +9,11 @@ import utils
 import datetime
 import base64
 import json
+from tracker import *
+
+# Initialize Tracker
+tracker = EuclideanDistTracker()
+
 
 def run(model: str, camera_id: int, width: int, height: int, num_threads: int, enable_edgetpu: bool) -> None:
 
