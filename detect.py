@@ -9,12 +9,10 @@ import utils
 import datetime
 import base64
 import json
-from tracker import *
+from tracker import Tracker
 
 # Initialize Tracker
-tracker = EuclideanDistTracker()
-
-
+tracker = Tracker()
 
 
 def run(model: str, camera_id: int, width: int, height: int, num_threads: int, enable_edgetpu: bool) -> None:
@@ -71,7 +69,14 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 		# Run object detection estimation using the model.
 		detections = detector.detect(image)
 
+		bboxes =[]
+		confidences =[]
+		class_ids=[]
+
 		for detection in detections:
+			bboxes.append(detection.bounding_box)
+			confidences.append(detection.categories[0].score)
+			class_ids.append(detection.categories[0].label)
 			left, top, right, bottom = detection.bounding_box
 			if left < 0:
 				left = 0
@@ -81,11 +86,6 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 				right = 0
 			if bottom < 0:
 				bottom = 0
-			w = 640
-			h = 480
-			#crop_image = image[int(left):int(w), int(top):int(h)]
-			#cv2.imshow("still_image", crop_image)
-			date_time = str(datetime.datetime.now())
 
 			output_dict = {
 				"id": str(datetime.datetime.now()),
@@ -99,18 +99,12 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 
 			output_list.append(output_dict)
 			print(detection.bounding_box)
-			tracker.update(detection)
 
-			#if (detection.categories[0].label) == "person":
-			#cv2.imwrite("/home/pi/examples/lite/examples/object_detection/raspberry_pi/images/people/" + date_time + ".jpeg", crop_image)
+			
+		tracks = tracker.update(bboxes, confidences, class_ids)
+		image = utils.draw_tracks(image, tracks)
 
-			#if (detection.categories[0].label) == "keyboard":
-			#cv2.imwrite("/home/pi/examples/lite/examples/object_detection/raspberry_pi/images/bottles/" + date_time + ".jpeg", crop_image)
-
-			#time.sleep(2)
-
-
-			# Draw keypoints and edges on input image
+		# Draw keypoints and edges on input image
 		image = utils.visualize(image, detections)
 
 		# Calculate the FPS
@@ -118,10 +112,12 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 			end_time = time.time()
 			fps = fps_avg_frame_count / (end_time - start_time)
 			start_time = time.time()
+		
 
 		# Show the FPS
 		fps_text = 'FPS = {:.1f}'.format(fps)
 		text_location = (left_margin, row_size)
+		print(fps_text)
 		cv2.putText(image, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
 				font_size, text_color, font_thickness)
 
