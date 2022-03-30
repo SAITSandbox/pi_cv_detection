@@ -209,7 +209,7 @@ class Track:
 		class_id=None,
 		lost=0,
 		iou_score=0.,
-		**kwargs
+		**kwargs,
 	):
 		Track.count += 1
 		self.id = track_id
@@ -272,7 +272,7 @@ class Track:
 		tuple: Tuple of 10 elements representing `(frame, id, bb_left, bb_top, bb_width, bb_height, conf, x, y, z)`.
 		"""
 		mot_tuple = (
-		self.frame_id, self.id, self.bbox[0], self.bbox[1], self.bbox[2], self.bbox[3], self.detection_confidence,
+		self.frame_id, self.id, self.bbox[0], self.bbox[1], self.bbox[2], self.bbox[3], self.detection_confidence, self.class_id, self.age,
 		-1, -1, -1
 		)
 		return mot_tuple
