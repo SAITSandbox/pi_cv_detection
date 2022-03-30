@@ -95,7 +95,7 @@ def run(
 				output_dict = {
 					"id": str(datetime.datetime.now()),
 					"timestamp": str(datetime.datetime.now()),
-					"image": base64.b64encode(image),
+					"image": str(base64.b64encode(image)),
 					"class": str(track[7]),
 					"confidence": str(track[6]),
 					"lat": str(35.812296),
