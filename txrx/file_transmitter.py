@@ -35,6 +35,7 @@ class ClientListener():
             if self.all_files_sent:
                 break
             if not self.client_found:
+                print("Wait for client")
                 connection = socket.socket()
                 connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 connection.bind(('0.0.0.0', self.recv_port))
@@ -47,6 +48,7 @@ class ClientListener():
                 print(f"{client_address[0]} connected")
             
             if not self.client_authorised:
+                print("Wait for client auth...")
                 raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
                 print(f"{client_address[0]}: {raw_message}")
                 
@@ -61,12 +63,12 @@ class ClientListener():
                     self.send_msg(client_socket, "ready")
                     
                 else:
-                    print("reset client found...")
-                    self.client_found = False
                     print("Incorrect auth code - waiting for new client")
+                    self.client_found = False
                     
             else:
                 # wait to receive message to hang the while loop
+                print("Waiting for client ")
                 raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
                 print(f"{client_address[0]}: {raw_message}")
                 
@@ -101,10 +103,8 @@ class ClientListener():
             print(f"Next file to send is: {file}")
             self.send_file(file, client_connection)
             shutil.move(file, "sent/")
-            files_to_send.remove(file)
             
-        if len(files_to_send) == 0:
-            self.all_files_sent = True
+        self.all_files_sent = True
             
     
 
