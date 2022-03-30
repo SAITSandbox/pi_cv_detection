@@ -15,7 +15,13 @@ from tracker import Tracker
 tracker = Tracker()
 
 
-def run(model: str, camera_id: int, width: int, height: int, num_threads: int, enable_edgetpu: bool) -> None:
+def run(
+	model: str,
+	camera_id: int,
+	width: int,
+	height: int,
+	num_threads: int,
+	enable_edgetpu: bool) -> None:
 
 	"""Continuously run inference on images acquired from the camera.
 	Args:
@@ -175,4 +181,4 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+	main()
