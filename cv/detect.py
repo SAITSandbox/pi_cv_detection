@@ -107,7 +107,10 @@ def run(
 
 				#output_list.append(output_dict)
 				print("Started encryptingdata into a file")
-				cryptox.rsa_encrypt(json.dumps(output_dict),  f"data/{output_dict['id']}.bin", "rsa_public.pem")
+				cryptox.rsa_encrypt(
+                        json.dumps(output_dict),
+                        f"data/{output_dict['id']}.bin",
+                        "rsa_public.pem")
 				print('track saved')
 
 
