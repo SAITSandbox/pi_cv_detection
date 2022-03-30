@@ -208,7 +208,8 @@ class ObjectDetector:
 
         # Resize the input
         input_tensor = cv2.resize(input_image, self._input_size)
-
+        
+        
         # Normalize the input if it's a float model (aka. not quantized)
         if not self._is_quantized_input:
             input_tensor = (np.float32(input_tensor) - self._mean) / self._std

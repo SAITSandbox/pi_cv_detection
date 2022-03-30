@@ -88,7 +88,7 @@ def run(
 			left, top, right, bottom = detection.bounding_box
 
 		tracks = tracker.update(bboxes, confidences, class_ids)
-		print(tracks)
+		#print(tracks)
 		for track in tracks:
 			track_age = track[8]
 			if track_age == 3:
