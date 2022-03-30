@@ -60,6 +60,6 @@ def rsa_decrypt(filename: str) -> str:
 
 
 if __name__ == "__main__":
-    # dummy_data = "{'test': 'hello world'}"
-    # rsa_encrypt(dummy_data, 'test.bin')
-    print(rsa_decrypt('hello.bin'))
+    dummy_data = "{'test': 'hello world'}"
+    rsa_encrypt(dummy_data, 'test.bin', None)
+    print(rsa_decrypt('test.bin'))
