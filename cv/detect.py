@@ -102,7 +102,7 @@ def run(
 					"lng": str(38.074243)
 				}
 
-				with open(f"data/{output_dict['id']}.bin", 'w') as file:
+				with open(f"data/{output_dict['id']}.json", 'w') as file:
 					json.dump(output_dict, file)
 
 				print("Started encrypting data into a file")
