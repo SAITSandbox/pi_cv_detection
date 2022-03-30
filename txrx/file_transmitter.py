@@ -16,6 +16,8 @@ class ClientListener():
         self.auth_code = auth_code
         
         self.all_files_sent = False
+        self.client_found = False
+        self.client_authorised = False
         
         self.SEPARATOR = "<SEP>"
         self.BUFFER_SIZE = 1024
@@ -26,13 +28,13 @@ class ClientListener():
         Once detected, with correct auth code, send data
         """    
         
-        client_found = False
-        client_authorised = False
         
         while True:
+            print(f"client found: {self.client_found}")
+            print(f"client authorised: {self.client_authorised}")
             if self.all_files_sent:
                 break
-            if not client_found:
+            if not self.client_found:
                 connection = socket.socket()
                 connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
                 connection.bind(('0.0.0.0', self.recv_port))
@@ -41,22 +43,26 @@ class ClientListener():
                 
                 client_socket, client_address = connection.accept()
                 
-                client_found = True
-            print(f"{client_address[0]} connected")
+                self.client_found = True
+                print(f"{client_address[0]} connected")
             
-            if not client_authorised:
+            if not self.client_authorised:
                 raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
                 print(f"{client_address[0]}: {raw_message}")
                 
                 # to be used later if we are splitting messages up into packets
-                cleaned_message = raw_message.split(self.SEPARATOR)
+                # cleaned_message = raw_message.split(self.SEPARATOR)
                 
+                # if raw_message == self.auth_code:
                 if raw_message == self.auth_code:
                     print("Auth code accepted - begin data transfer")
-                    client_authorised = True
+                    self.client_authorised = True
+                    time.sleep(0.25)
+                    self.send_msg(client_socket, "ready")
                     
                 else:
-                    client_found = False
+                    print("reset client found...")
+                    self.client_found = False
                     print("Incorrect auth code - waiting for new client")
                     
             else:
