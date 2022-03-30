@@ -80,21 +80,26 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 			class_ids.append(detection.categories[0].label)
 			left, top, right, bottom = detection.bounding_box
 
-			output_dict = {
-				"id": str(datetime.datetime.now()),
-				"timestamp": str(datetime.datetime.now()),
-			# "image": base64.b64encode(image),
-				"class": str(detection.categories[0].label),
-				"confidence": str(detection.categories[0].score),
-				"lattiude": str(35.812296),
-				"longtiude": str(38.074243)
-			}
-
-			output_list.append(output_dict)
-			print(detection.bounding_box)
-
 		tracks = tracker.update(bboxes, confidences, class_ids)
 		print(tracks)
+		for track in tracks:
+			track_age = track[8]
+			if track_age == 10:
+
+				output_dict = {
+					"id": str(datetime.datetime.now()),
+					"timestamp": str(datetime.datetime.now()),
+					#"image": base64.b64encode(image),
+					"class": str(track[7]),
+					"confidence": str(track[6]),
+					"lattiude": str(35.812296),
+					"longtiude": str(38.074243)
+				}
+
+				output_list.append(output_dict)
+				print('track saved')
+
+
 		image = utils.draw_tracks(image, tracks)
 
 		# Draw keypoints and edges on input image
