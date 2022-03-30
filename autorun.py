@@ -8,7 +8,8 @@ run(model="cv/truck.tflite",
     width=640,
     height=480,
     num_threads=4,
-    enable_edgetpu=False)
+    enable_edgetpu=False,
+    time_limit=10)
 
 
 # run wifi hotspot scripts

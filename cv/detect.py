@@ -22,7 +22,8 @@ def run(
 	width: int,
 	height: int,
 	num_threads: int,
-	enable_edgetpu: bool) -> None:
+	enable_edgetpu: bool,
+    time_limit=30) -> None:
 
 	"""Continuously run inference on images acquired from the camera.
 	Args:
@@ -61,8 +62,9 @@ def run(
 
 	# Continuously capture images from the camera and run inference
 	output_list = []
+	countdown = time.time() + time_limit
 
-	while cap.isOpened():
+	while cap.isOpened() and time.time() < countdown:
 		success, image = cap.read()
 
 		if not success:
