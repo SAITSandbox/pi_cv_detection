@@ -74,18 +74,11 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 		class_ids=[]
 
 		for detection in detections:
+
 			bboxes.append(detection.bounding_box)
 			confidences.append(detection.categories[0].score)
 			class_ids.append(detection.categories[0].label)
 			left, top, right, bottom = detection.bounding_box
-			if left < 0:
-				left = 0
-			if top < 0:
-				top = 0
-			if right < 0:
-				right = 0
-			if bottom < 0:
-				bottom = 0
 
 			output_dict = {
 				"id": str(datetime.datetime.now()),
@@ -100,7 +93,6 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 			output_list.append(output_dict)
 			print(detection.bounding_box)
 
-			
 		tracks = tracker.update(bboxes, confidences, class_ids)
 		image = utils.draw_tracks(image, tracks)
 
