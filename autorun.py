@@ -11,14 +11,16 @@ run(model="cv/truck.tflite",
     height=480,
     num_threads=4,
     enable_edgetpu=False,
-    time_limit=10)
+    time_limit=20)
 
 if len(listdir('not_sent')) > 0:
     """run wifi hotspot scripts"""
-    # listener = ClientListener()
-    # listener.listen_for_client()
+    listener = ClientListener()
+    listener.listen_for_client()
+    call(["shutdown", "-h", "now"])
     pass
-else:
+
+if len(listdir('not_sent')) == 0:
     """shutdown the pi for later"""
-    # call(["shutdown", "-h", "now"])
+    call(["shutdown", "-h", "now"])
     pass
