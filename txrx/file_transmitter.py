@@ -51,9 +51,12 @@ class ClientListener():
                 # to be used later if we are splitting messages up into packets
                 cleaned_message = raw_message.split(self.SEPARATOR)
                 
+                # if raw_message == self.auth_code:
                 if raw_message == self.auth_code:
                     print("Auth code accepted - begin data transfer")
                     client_authorised = True
+                    time.sleep(0.25)
+                    self.send_msg(client_socket, "ready")
                     
                 else:
                     client_found = False
