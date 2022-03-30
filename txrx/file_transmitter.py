@@ -1,4 +1,5 @@
 import base64, os, socket, shutil, time
+from datetime import datetime
 
 class ClientListener():
     """
@@ -75,19 +76,19 @@ class ClientListener():
         files_to_send = ["not_sent/" + file for file in os.listdir("not_sent")]
         
         # ===send files as one zipped file===
-        zipped_folder = self.zip_files(files_to_send)
-        self.send_file(zipped_folder, client_connection)
-        for file in files_to_send:
-            shutil.move(file, "sent/")
+        # zipped_folder = self.zip_files(files_to_send)
+        # self.send_file(zipped_folder, client_connection)
+        # for file in files_to_send:
+        #     shutil.move(file, "sent/")
         
         # ===send files separately===
-        # print(f"Sending {len(files_to_send)} files to client.")
-        # self.send_msg(client_connection, f"{len(files_to_send)}")
-        # time.sleep(0.25)
-        # for file in files_to_send:
-        #     print(f"Next file to send is: {file}")
-        #     self.send_file(file, client_connection)
-        #     shutil.move(file, "sent/")
+        print(f"Sending {len(files_to_send)} files to client.")
+        self.send_msg(client_connection, f"{len(files_to_send)}")
+        time.sleep(0.25)
+        for file in files_to_send:
+            print(f"Next file to send is: {file}")
+            self.send_file(file, client_connection)
+            shutil.move(file, "sent/")
             
     
 
@@ -116,8 +117,14 @@ class ClientListener():
         with open(filename, "rb") as file:
             file_string = base64.b64encode(file.read())#.decode("utf-8")
             
+        num_packets = len(file_string) / self.BUFFER_SIZE
+        print(num_packets)
+        time.sleep(2)
+        with open("time.txt", "a") as f:
+            f.write(f"\n{datetime.now().strftime('%H%M')}")
+            
         self.send_msg(client_connection, "data")
-        time.sleep(0.5)
+        # time.sleep(0.5)
         
         pos = 0
         for _ in range(len(file_string)):
@@ -129,8 +136,10 @@ class ClientListener():
             packets += 1
             print(f"Send image: sent packet {packets}")
             pos += self.BUFFER_SIZE
-
-        self.send_msg(client_connection, "end")
+        time.sleep(0.5)
+        self.send_msg(client_connection, "'end'")
+        with open("time.txt", "a") as f:
+            f.write(f"\n{datetime.now().strftime('%H%M')}")
 
         time.sleep(0.5)
 
