@@ -23,8 +23,8 @@ def run(
 	height: int,
 	num_threads: int,
 	enable_edgetpu: bool,
-    time_limit=30) -> None:
-
+	time_limit=30
+) -> None:
 	"""Continuously run inference on images acquired from the camera.
 	Args:
 	model: Name of the TFLite object detection model.
@@ -54,10 +54,10 @@ def run(
 
 	# Initialize the object detection model
 	options = ObjectDetectorOptions(
-	num_threads=num_threads,
-	score_threshold=0.7,
-	max_results=3,
-	enable_edgetpu=enable_edgetpu)
+		num_threads=num_threads,
+		score_threshold=0.7,
+		max_results=3,
+		enable_edgetpu=enable_edgetpu)
 	detector = ObjectDetector(model_path=model, options=options)
 
 	# Continuously capture images from the camera and run inference
@@ -78,41 +78,38 @@ def run(
 		# Run object detection estimation using the model.
 		detections = detector.detect(image)
 
-		bboxes =[]
-		confidences =[]
-		class_ids=[]
+		bboxes = []
+		confidences = []
+		class_ids = []
 
 		for detection in detections:
-
 			bboxes.append(detection.bounding_box)
 			confidences.append(detection.categories[0].score)
 			class_ids.append(detection.categories[0].label)
 			left, top, right, bottom = detection.bounding_box
 
 		tracks = tracker.update(bboxes, confidences, class_ids)
-		#print(tracks)
 		for track in tracks:
 			track_age = track[8]
 			if track_age == 3:
-
 				output_dict = {
 					"id": str(datetime.datetime.now()),
 					"timestamp": str(datetime.datetime.now()),
-					#"image": base64.b64encode(image),
+					"image": base64.b64encode(image),
 					"class": str(track[7]),
 					"confidence": str(track[6]),
-					"lattiude": str(35.812296),
-					"longtiude": str(38.074243)
+					"lat": str(35.812296),
+					"lng": str(38.074243)
 				}
-
-				#output_list.append(output_dict)
-				print("Started encryptingdata into a file")
-				cryptox.rsa_encrypt(
-                        json.dumps(output_dict),
-                        f"data/{output_dict['id']}.bin",
-                        "rsa_public.pem")
+				print("Started encrypting data into a file")
+				ciphertext = cryptox.encrypt(
+					plaintext=json.dumps(output_dict),
+					rsa_pub_key='rsa_public.pem'
+				)
+				# Save the encrypted data into file
+				with open(f"data/{output_dict['id']}.bin", 'w') as file:
+					file.write(ciphertext)
 				print('track saved')
-
 
 		image = utils.draw_tracks(image, tracks)
 
@@ -124,7 +121,6 @@ def run(
 			end_time = time.time()
 			fps = fps_avg_frame_count / (end_time - start_time)
 			start_time = time.time()
-		
 
 		# Show the FPS
 		fps_text = 'FPS = {:.1f}'.format(fps)
@@ -137,7 +133,6 @@ def run(
 		if cv2.waitKey(1) == 27:
 			break
 		cv2.imshow('object_detector', image)
-
 
 	cap.release()
 	print("Started writing JSON data into a file")
