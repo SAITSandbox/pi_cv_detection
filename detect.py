@@ -94,6 +94,7 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int, e
 			print(detection.bounding_box)
 
 		tracks = tracker.update(bboxes, confidences, class_ids)
+		print(tracks)
 		image = utils.draw_tracks(image, tracks)
 
 		# Draw keypoints and edges on input image
