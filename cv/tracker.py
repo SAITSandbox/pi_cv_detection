@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import numpy as np
 from scipy import spatial 
-from utils import get_centroid
+from cv.utils import get_centroid
 
 
 class Tracker:

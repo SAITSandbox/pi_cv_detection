@@ -3,13 +3,14 @@ import argparse
 import sys
 import time
 import cv2
-from object_detector import ObjectDetector
-from object_detector import ObjectDetectorOptions
-import utils
+from cv.object_detector import ObjectDetector
+from cv.object_detector import ObjectDetectorOptions
+import cv.utils as utils
 import datetime
 import base64
 import json
-from tracker import Tracker
+from cv.tracker import Tracker
+import cryptox
 
 # Initialize Tracker
 tracker = Tracker()
@@ -90,7 +91,7 @@ def run(
 		print(tracks)
 		for track in tracks:
 			track_age = track[8]
-			if track_age == 10:
+			if track_age == 3:
 
 				output_dict = {
 					"id": str(datetime.datetime.now()),
@@ -102,7 +103,9 @@ def run(
 					"longtiude": str(38.074243)
 				}
 
-				output_list.append(output_dict)
+				#output_list.append(output_dict)
+				print("Started encryptingdata into a file")
+				cryptox.rsa_encrypt(json.dumps(output_dict),  f"data/{output_dict['id']}.bin", "rsa_public.pem")
 				print('track saved')
 
 
@@ -147,7 +150,7 @@ def main():
 		'--model',
 		help='Path of the object detection model.',
 		required=False,
-		default='efficientdet_lite0.tflite')
+		default='cv/efficientdet_lite0.tflite')
 	parser.add_argument(
 		'--cameraId', help='Id of camera.', required=False, type=int, default=0)
 	parser.add_argument(

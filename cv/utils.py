@@ -17,7 +17,7 @@ from typing import List
 
 import cv2
 import numpy as np
-from object_detector import Detection
+from cv.object_detector import Detection
 
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
@@ -51,10 +51,6 @@ detections: List[Detection],
 		start_point = detection.bounding_box.left, detection.bounding_box.top
 		end_point = detection.bounding_box.right, detection.bounding_box.bottom
 		cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
-		top, left, bottom, right = detection.bounding_box
-		center = find_center(left, top, right, bottom)
-		cv2.circle(image, center, 10, (0, 0, 255), 5) 
-
 
 		# Draw label and score
 		category = detection.categories[0]
