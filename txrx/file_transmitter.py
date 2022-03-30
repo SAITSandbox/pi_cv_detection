@@ -1,4 +1,5 @@
 import base64, os, socket, shutil, time
+from curses import raw
 from datetime import datetime
 
 class ClientListener():
@@ -14,6 +15,8 @@ class ClientListener():
         self.send_port = send_port
         self.auth_code = auth_code
         
+        self.all_files_sent = False
+        
         self.SEPARATOR = "<SEP>"
         self.BUFFER_SIZE = 1024
 
@@ -27,6 +30,8 @@ class ClientListener():
         client_authorised = False
         
         while True:
+            if self.all_files_sent:
+                break
             if not client_found:
                 connection = socket.socket()
                 connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -63,8 +68,9 @@ class ClientListener():
                     time.sleep(1)
                     self.send_data(client_socket)
                 else:
-                    msg = input("Message: ")
-                    self.send_msg(client_socket, msg)
+                    print(raw_message)
+                    # msg = input("Message: ")
+                    # self.send_msg(client_socket, msg)
                 
                 time.sleep(1)
                 
@@ -89,6 +95,10 @@ class ClientListener():
             print(f"Next file to send is: {file}")
             self.send_file(file, client_connection)
             shutil.move(file, "sent/")
+            files_to_send.remove(file)
+            
+        if len(files_to_send) == 0:
+            self.all_files_sent = True
             
     
 
