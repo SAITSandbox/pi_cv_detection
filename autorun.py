@@ -1,14 +1,15 @@
 # global imports
 from subprocess import call
-from detect import run
+from cv.detect import run
 
 # run computer vision scripts
-run(model="efficientdet_lite0.tflite",
+run(model="cv/truck.tflite",
     camera_id=0,
     width=640,
     height=480,
     num_threads=4,
-    enable_edgetpu=False)
+    enable_edgetpu=False,
+    time_limit=10)
 
 
 # run wifi hotspot scripts
