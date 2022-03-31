@@ -6,7 +6,7 @@ from os import listdir
 from time import sleep
 
 """run computer vision scripts"""
-run(model="cv/truck.tflite",
+run(model="cv/model.tflite",
     camera_id=0,
     width=640,
     height=480,
