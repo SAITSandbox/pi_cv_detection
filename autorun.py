@@ -26,3 +26,4 @@ if len(listdir('not_sent')) == 0:
     print('No more files to send')
     # call(["shutdown", "-h", "now"])
     pass
+
