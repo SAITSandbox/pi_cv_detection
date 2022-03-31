@@ -18,6 +18,7 @@ class ClientListener():
         self.all_files_sent = False
         self.client_found = False
         self.client_authorised = False
+        self.files_to_send = []
         
         self.SEPARATOR = "<SEP>"
         self.BUFFER_SIZE = 1024
@@ -27,13 +28,26 @@ class ClientListener():
         Listens for connection from a client (guy with device that will receive images/data)
         Once detected, with correct auth code, send data
         """    
+        sending = False
         
         
         while True:
             print(f"client found: {self.client_found}")
             print(f"client authorised: {self.client_authorised}")
+            
             if self.all_files_sent:
                 break
+            
+            if sending:
+                raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
+                if int(raw_message):
+                    print(f"send file {str(raw_message)}")
+                    self.send_file(self.files_to_send[int(raw_message)])
+                elif raw_message == "Bye":
+                    self.all_files_sent = True
+                else:
+                    print(f"Unexpected message: {raw_message}")
+            
             if not self.client_found:
                 print("Wait for client")
                 connection = socket.socket()
@@ -67,27 +81,34 @@ class ClientListener():
                     self.client_found = False
                     
             else:
-                # wait to receive message to hang the while loop
-                print("Waiting for client ")
-                raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
-                print(f"{client_address[0]}: {raw_message}")
+                if not sending:
+                    # wait to receive message to hang the while loop
+                    print("Waiting for client ")
+                    raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
+                    print(f"{client_address[0]}: {raw_message}")
+                    
+                    if raw_message == "Files":
+                        self.files_to_send = ["not_sent/" + file for file in os.listdir("not_sent")]
+                        self.send_msg(client_socket, f"{len(self.files_to_send)}")
+                        time.sleep(1)
+                        # self.send_data(client_socket)
+                        sending = True                        
+                    else:
+                        print(raw_message)
+                        # msg = input("Message: ")
+                        # self.send_msg(client_socket, msg)
                 
-                if raw_message == "send":
                     time.sleep(1)
-                    self.send_data(client_socket)
-                else:
-                    print(raw_message)
-                    # msg = input("Message: ")
-                    # self.send_msg(client_socket, msg)
-                
-                time.sleep(1)
                 
     def send_data(self, client_connection):
         """
         Once a client device is detected and approved, begin sending files
         Once files are sent, move them to the sent folder
         """
-        files_to_send = ["not_sent/" + file for file in os.listdir("not_sent")]
+        
+        
+        
+        # files_to_send = ["not_sent/" + file for file in os.listdir("not_sent")]
         
         # ===send files as one zipped file===
         # zipped_folder = self.zip_files(files_to_send)
@@ -96,13 +117,16 @@ class ClientListener():
         #     shutil.move(file, "sent/")
         
         # ===send files separately===
-        print(f"Sending {len(files_to_send)} files to client.")
-        self.send_msg(client_connection, f"{len(files_to_send)}")
-        time.sleep(0.25)
-        for file in files_to_send:
-            print(f"Next file to send is: {file}")
-            self.send_file(file, client_connection)
-            shutil.move(file, "sent/")
+        # print(f"Sending {len(files_to_send)} files to client.")
+        # self.send_msg(client_connection, f"{len(files_to_send)}")
+        # time.sleep(0.25)
+        # i = 0
+        # for file in files_to_send:
+        #     print(f"Next file to send is: {file}")
+        #     self.send_msg(client_connection, str(files_to_send[i]))
+        #     self.send_file(file, client_connection)
+        #     shutil.move(file, "sent/")
+        #     i += 1
             
         self.all_files_sent = True
             
