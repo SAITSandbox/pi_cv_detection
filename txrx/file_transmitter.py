@@ -47,6 +47,7 @@ class ClientListener():
                     try:
                         print(f"send file {str(raw_message)}")
                         self.send_file(self.files_to_send[int(raw_message)])
+                        shutil.move(self.files_to_send[int(raw_message)], "sent/")
                     except:
                         print(f"Unexpected message: {raw_message}")
             
