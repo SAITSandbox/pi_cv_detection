@@ -42,12 +42,12 @@ class ClientListener():
                 raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
                 if raw_message == "Bye":
                     self.all_files_sent = True
-                elif raw_message != "Bye":
+                else:
                     try:
                         print(f"send file {str(raw_message)}")
                         self.send_file(self.files_to_send[int(raw_message)])
                     except:
-                        print("not int")
+                        print(f"Unexpected message: {raw_message}")
             
             if not self.client_found:
                 print("Wait for client")
@@ -100,40 +100,7 @@ class ClientListener():
                         # self.send_msg(client_socket, msg)
                 
                     time.sleep(1)
-                
-    def send_data(self, client_connection):
-        """
-        Once a client device is detected and approved, begin sending files
-        Once files are sent, move them to the sent folder
-        """
-        
-        
-        
-        # files_to_send = ["not_sent/" + file for file in os.listdir("not_sent")]
-        
-        # ===send files as one zipped file===
-        # zipped_folder = self.zip_files(files_to_send)
-        # self.send_file(zipped_folder, client_connection)
-        # for file in files_to_send:
-        #     shutil.move(file, "sent/")
-        
-        # ===send files separately===
-        # print(f"Sending {len(files_to_send)} files to client.")
-        # self.send_msg(client_connection, f"{len(files_to_send)}")
-        # time.sleep(0.25)
-        # i = 0
-        # for file in files_to_send:
-        #     print(f"Next file to send is: {file}")
-        #     self.send_msg(client_connection, str(files_to_send[i]))
-        #     self.send_file(file, client_connection)
-        #     shutil.move(file, "sent/")
-        #     i += 1
-            
-        self.all_files_sent = True
-            
-    
 
-            
     def send_msg(self, client_connection, msg, file=False):
         """
         For sending a short text message to the client
@@ -183,21 +150,6 @@ class ClientListener():
             f.write(f"\n{datetime.now().strftime('%H%M')}")
 
         time.sleep(0.5)
-
-    def get_files(self):
-        """
-        Gets a list of all the files to be sent based on whether client activates
-        heavy mode or light mode (heavy true/false)
-        """
-        
-        files = []
-        
-        for file in os.listdir("not_sent"):
-            print(file)
-            files.append("not_sent/" + file)
-            
-        print(files)
-        return files
     
     def zip_files(self, files):
         return shutil.make_archive("egressdata", "zip", "not_sent")
