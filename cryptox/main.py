@@ -36,7 +36,7 @@ def encrypt(plaintext: str, rsa_pub_key: _RSAPublicKey):
     # Using [2:-1] to get rid of unwanted chars when converting to string from bytes
     data = "{"
     data += '"key_cipher":' + '"' + str(base64.b64encode(key_cipher))[2:-1] + '",'
-    data += '"data_cipher":' + '"' + str(base64.b64encode(token))[2:-1] + '",'
+    data += '"data_cipher":' + '"' + str(base64.b64encode(token))[2:-1] + '"'
     data += "}"
     # x = json.loads(data)['d']
     # t = base64.b64decode(x)

@@ -101,14 +101,17 @@ def run(
 					"lat": str(35.812296),
 					"lng": str(38.074243)
 				}
+
 				print("Started encrypting data into a file")
 				ciphertext = cryptox.encrypt(
 					plaintext=json.dumps(output_dict),
 					rsa_pub_key='rsa_public.pem'
 				)
+
 				# Save the encrypted data into file
-				with open(f"data/{output_dict['id']}.bin", 'w') as file:
-					file.write(ciphertext)
+				with open(f"not_sent/{output_dict['id']}.bin", 'w') as file:
+					json.dump(ciphertext, file)
+
 				print('track saved')
 
 		image = utils.draw_tracks(image, tracks)

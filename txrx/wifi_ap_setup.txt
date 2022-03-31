@@ -1,0 +1,16 @@
+    6  sudo apt install hostapd
+    7  sudo apt install dnsmasq
+    8  sudo DEBIAN_FRONTEND=noninteractive apt install -y netfilter-persistent iptables-persistent
+    9  sudo systemctl unmask hostapd.service
+   10  sudo systemctl enable hostapd.service
+   11  sudo nano /etc/dhcpcd.conf 
+   12  sudo nano /etc/sysctl.d/routed-ap.conf
+   13  sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+   14  sudo reboot now
+   15  sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+   16  sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.old
+   17  sudo touch /etc/dnsmasq.conf
+   18  sudo nano /etc/dnsmasq.conf
+   19  sudo touch /etc/hostapd/hostapd.conf
+   20  sudo nano /etc/hostapd/hostapd.conf
+   21  sudo reboot now
