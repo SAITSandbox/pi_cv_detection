@@ -5,7 +5,7 @@ __pycache__/
 .idea/
 cv/__pycache__/
 cryptox/__pycache__/
-
+sent/
 
 # C extensions
 *.so
