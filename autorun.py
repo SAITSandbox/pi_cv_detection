@@ -5,7 +5,7 @@ from txrx.file_transmitter import ClientListener
 from os import listdir
 
 """run computer vision scripts"""
-run(model="cv/truck.tflite",
+run(model="cv/model.tflite",
     camera_id=0,
     width=640,
     height=480,
