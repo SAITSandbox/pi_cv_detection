@@ -10,10 +10,18 @@ import datetime
 import base64
 import json
 from cv.tracker import Tracker
+import numpy as np
 import cryptox
 
 # Initialize Tracker
 tracker = Tracker()
+
+
+def image_to_base64(img: np.ndarray) -> str:
+    """ Given a numpy 2D array, returns a JPEG image in base64 format """
+    # using opencv 2, there are others ways
+    img_buffer = cv2.imencode('.jpg', img)[1]
+    return base64.b64encode(img_buffer).decode('utf-8')
 
 
 def run(
@@ -95,7 +103,7 @@ def run(
 				output_dict = {
 					"id": str(datetime.datetime.now()),
 					"timestamp": str(datetime.datetime.now()),
-					"image": str(base64.b64encode(image))[2:-1],
+					"image": image_to_base64(image),
 					"class": str(track[7]),
 					"confidence": str(track[6]),
 					"lat": str(35.812296),
