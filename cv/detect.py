@@ -91,7 +91,7 @@ def run(
 		tracks = tracker.update(bboxes, confidences, class_ids)
 		for track in tracks:
 			track_age = track[8]
-			if track_age == 3:
+			if track_age == 2:
 				output_dict = {
 					"id": str(datetime.datetime.now()),
 					"timestamp": str(datetime.datetime.now()),
