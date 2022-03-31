@@ -42,11 +42,12 @@ class ClientListener():
                 raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
                 if raw_message == "Bye":
                     self.all_files_sent = True
-                elif raw_message != "Bye":
+                else:
                     try:
                         print(f"send file {str(raw_message)}")
-                        self.send_file(self.files_to_send[int(raw_message)])
+                        self.send_file(self.files_to_send[int(raw_message)], client_socket)
                     except:
+                        print(raw_message)
                         print("not int")
             
             if not self.client_found:
@@ -75,7 +76,7 @@ class ClientListener():
                     print("Auth code accepted - begin data transfer")
                     self.client_authorised = True
                     time.sleep(0.25)
-                    self.send_msg(client_socket, "ready")
+                    self.send_msg(client_socket, "Ack")
                     
                 else:
                     print("Incorrect auth code - waiting for new client")
