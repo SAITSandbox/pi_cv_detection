@@ -5,7 +5,7 @@ from datetime import datetime
 class ClientListener():
     """
     Instantiate by declaring receive port, send port and an authorisation code that the client
-    must send to egress data.
+    must send to egress data. Defaults to 5010, 5011 and 'go'.
     
     Activate by calling listen_for_client, with no arguments.
     """
@@ -26,7 +26,8 @@ class ClientListener():
     def listen_for_client(self):
         """
         Listens for connection from a client (guy with device that will receive images/data)
-        Once detected, with correct auth code, send data
+        Once detected, with correct auth code, tells client how many files to expect.
+        Client then requests files one by one.
         """    
         sending = False
         
