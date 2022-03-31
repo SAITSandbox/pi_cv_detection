@@ -125,7 +125,8 @@ class ClientListener():
         packets = 0
         
         with open(filename, "rb") as file:
-            file_string = base64.b64encode(file.read())#.decode("utf-8")
+            # file_string = base64.b64encode(file.read())#.decode("utf-8")
+            file_string = file.read()#.decode("utf-8")
             
         num_packets = len(file_string) / self.BUFFER_SIZE
         print(num_packets)
@@ -146,8 +147,6 @@ class ClientListener():
             pos += self.BUFFER_SIZE
         time.sleep(0.5)
         self.send_msg(client_connection, "'end'")
-        with open("time.txt", "a") as f:
-            f.write(f"\n{datetime.now().strftime('%H%M')}")
 
         time.sleep(0.5)
     
