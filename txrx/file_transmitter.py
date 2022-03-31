@@ -40,13 +40,14 @@ class ClientListener():
             
             if sending:
                 raw_message = client_socket.recv(self.BUFFER_SIZE).decode()
-                if int(raw_message):
-                    print(f"send file {str(raw_message)}")
-                    self.send_file(self.files_to_send[int(raw_message)])
-                elif raw_message == "Bye":
+                if raw_message == "Bye":
                     self.all_files_sent = True
-                else:
-                    print(f"Unexpected message: {raw_message}")
+                elif raw_message != "Bye":
+                    try:
+                        print(f"send file {str(raw_message)}")
+                        self.send_file(self.files_to_send[int(raw_message)])
+                    except:
+                        print("not int")
             
             if not self.client_found:
                 print("Wait for client")
