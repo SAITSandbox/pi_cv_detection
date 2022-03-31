@@ -73,7 +73,7 @@ def run(
 			)
 
 		counter += 1
-		image = cv2.flip(image, 1)
+		#image = cv2.flip(image, 1)
 
 		# Run object detection estimation using the model.
 		detections = detector.detect(image)
