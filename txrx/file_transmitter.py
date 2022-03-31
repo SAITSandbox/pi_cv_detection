@@ -77,7 +77,7 @@ class ClientListener():
                     print("Auth code accepted - begin data transfer")
                     self.client_authorised = True
                     time.sleep(0.25)
-                    self.send_msg(client_socket, "ready")
+                    self.send_msg(client_socket, "Ack")
                     
                 else:
                     print("Incorrect auth code - waiting for new client")
@@ -130,8 +130,6 @@ class ClientListener():
         num_packets = len(file_string) / self.BUFFER_SIZE
         print(num_packets)
         time.sleep(2)
-        with open("time.txt", "a") as f:
-            f.write(f"\n{datetime.now().strftime('%H%M')}")
             
         self.send_msg(client_connection, "data")
         # time.sleep(0.5)
