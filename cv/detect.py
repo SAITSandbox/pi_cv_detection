@@ -109,7 +109,7 @@ def run(
 				)
 
 				# Save the encrypted data into file
-				with open(f"data/{output_dict['id']}.bin", 'w') as file:
+				with open(f"not_sent/{output_dict['id']}.bin", 'w') as file:
 					json.dump(ciphertext, file)
 
 				print('track saved')
