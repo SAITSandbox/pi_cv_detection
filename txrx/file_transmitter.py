@@ -101,7 +101,7 @@ class ClientListener():
                         # msg = input("Message: ")
                         # self.send_msg(client_socket, msg)
                 
-                    time.sleep(1)
+                    time.sleep(0.25)
 
     def send_msg(self, client_connection, msg, file=False):
         """
@@ -130,7 +130,7 @@ class ClientListener():
             
         num_packets = len(file_string) / self.BUFFER_SIZE
         print(num_packets)
-        time.sleep(2)
+        time.sleep(0.25)
             
         self.send_msg(client_connection, "data")
         # time.sleep(0.5)
@@ -145,10 +145,10 @@ class ClientListener():
             packets += 1
             print(f"Send image: sent packet {packets}")
             pos += self.BUFFER_SIZE
-        time.sleep(0.5)
+        time.sleep(0.25)
         self.send_msg(client_connection, "'end'")
 
-        time.sleep(0.5)
+        time.sleep(0.25)
     
     def zip_files(self, files):
         return shutil.make_archive("egressdata", "zip", "not_sent")
