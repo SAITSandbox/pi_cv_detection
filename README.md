@@ -96,7 +96,7 @@ Coral devices, read
 [TensorFlow models on the Edge TPU](https://coral.withgoogle.com/docs/edgetpu/models-intro/).
 
 
-##How to get GUI to work via SSH
+## How to get GUI to work via SSH
 
 ### On client machine
 
